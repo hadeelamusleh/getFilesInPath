@@ -1,45 +1,31 @@
 import glob
-import re
 from pip._vendor.distlib.compat import raw_input
+def allFiles(path):
+ filesName=glob.glob(path)
+ if(filesName!=[]):
+     sortedFiles=[]
+     for i in filesName:
+        i=i.split("/")
+        i=i[len(i)-1]
+        sortedFiles.append(i)
+     allFiles={}
+     for i in range(len(sortedFiles)):
+       file=sortedFiles[i].split(".")
+       if(len(file)==1):
+           path="folders"
+       else:
+         path=file[len(file)-1]
+       if path in allFiles:
+           allFiles[path]["num_of_files"]=allFiles[path]["num_of_files"]+1
+           allFiles[path]["files"].append(sortedFiles[i])
+       else:
+           allFiles[path]= {"num_of_files":1,"files":[sortedFiles[i]]}
+ else:
+   print("Error in path")
+ return allFiles
+
 try:
-   path=raw_input('Enter the path :')
+ path=raw_input('Enter the path :')
+ files=allFiles(path)
 except ValueError:
-    print("Error")
-
-
-filesName=glob.glob(path)
-if(filesName!=[]):
-    print(filesName);
-    filesName=str(filesName).strip('[]')
-    filesName= re.sub('[\']', '', filesName)
-    filesName=filesName.split(",")
-    for i in range(len(filesName)):
-        file=filesName[i].split("/")
-        file=file[len(file)-1]
-        filesName[i]=file
-        sortedFiles=filesName
-    for i in range(len(sortedFiles)):
-        for j in range(len(sortedFiles)):
-            file1=sortedFiles[i].split(".")
-            pathFile1=file1[len(file1)-1]
-            file2 = sortedFiles[j].split(".")
-            pathFile2 = file2[len(file2) - 1]
-            if(pathFile1> pathFile2):
-                 temp=sortedFiles[i]
-                 sortedFiles[i]=sortedFiles[j]
-                 sortedFiles[j]=temp
-    print("In your path have %d files"%len(sortedFiles))
-    first=sortedFiles[0].split(".")
-    firstpath=first[len(first)-1]
-    print("the  %s file is :"%firstpath)
-    for i in range(len(sortedFiles)):
-        file=sortedFiles[i].split(".")
-        path=file[len(file)-1]
-        if(path==firstpath):
-            print("\t %s"%sortedFiles[i])
-        else:
-            firstpath=path
-            print("the %s file is :"%path)
-            print("\t %s"%sortedFiles[i])
-else:
-    print("Error in path")
+ print("Error")
